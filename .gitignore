@@ -1,6 +1,5 @@
-Dataset/
-MFCC/
-Results/
-Test_Models/
-tim-net/
-Models/
+timnet/Dataset/
+timnet/Results/
+timnet/tim-net/
+timnet/Models
+ml_model/.
