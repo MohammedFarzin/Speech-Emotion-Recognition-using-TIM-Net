@@ -2,5 +2,5 @@ timnet/Dataset/
 timnet/Results/
 timnet/tim-net/
 timnet/Models
-ml_model/.
+ml_model/
 */migrations/
