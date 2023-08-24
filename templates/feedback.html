@@ -55,9 +55,29 @@
                 {% for feedback in feedbacks %}
                     <form action="{% url 'voice_record' feedback.id%}" method="post">
                         {% csrf_token %}
-                        <button type="submit" class="bg-danger">Record</button>
+                        <button type="submit" class="bg-danger" onclick="startRecording(this);">Record</button>
                     </form>
                 {% endfor %}
+            
+                <script>
+                    function startRecording(button) {
+                        var seconds = 6;
+                        var interval = setInterval(function() {
+                            seconds--;
+                            if (seconds >= 0) {
+                                button.innerHTML = "Recording in " + seconds + " seconds...";
+                            } else {
+                                clearInterval(interval);
+                                button.innerHTML = "Recording...";
+                                button.disabled = true;
+                                setTimeout(function() {
+                                    button.innerHTML = "Record";
+                                    button.disabled = false;
+                                }, 4000);
+                            }
+                        }, 1000);
+                    }
+                </script>
                 {% comment %} <div class="info">
                     <div class="address">
                 <i class="bi bi-geo-alt"></i>
@@ -88,6 +108,9 @@
 
         </div>
     </section><!-- End Contact Section -->
+
+    
+        
 
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 

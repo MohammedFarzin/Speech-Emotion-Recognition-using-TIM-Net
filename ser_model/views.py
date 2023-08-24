@@ -28,7 +28,6 @@ def feedback(request, bank_slug):
     
     bank = get_object_or_404(BankDetails, slug=bank_slug)
     feedbacks = Feedback.objects.filter(bank_id = bank.id)
-    print(feedbacks)
     context = {
         'bank' : bank,
         'feedbacks' : feedbacks
@@ -89,7 +88,7 @@ def emotion_generation(request):
 
     file_path = r"D:\Machine learning\Project\Speech Recognition System\SER_dj\ser_dj\output.wav"
     audio = get_feature(file_path)
-    weight_path = "D:\Machine learning\Project\Speech Recognition System\SER_dj\ser_dj\timnet\Test_Models\RAVDE_46\10-fold_weights_best_4.hdf5"
+    weight_path = r"D:\Machine learning\Project\Speech Recognition System\SER_dj\ser_dj\timnet\Test_Models\RAVDE_46\10-fold_weights_best_4.hdf5"
     audio = np.expand_dims(audio, axis=0)
     model.create_model()
     model.model.load_weights(weight_path)
@@ -114,7 +113,7 @@ def voice_record(request, feedback_id, CHUNK = 1024, FORMAT = pyaudio.paInt16, C
         print("start recording....")
 
         frames = []
-        seconds = 5
+        seconds = 6
         for i in range(0, int(RATE / CHUNK * seconds)):
             data = stream.read(CHUNK)
             frames.append(data)
@@ -151,8 +150,13 @@ def voice_record(request, feedback_id, CHUNK = 1024, FORMAT = pyaudio.paInt16, C
             emotion = 'surprise'
         else:
             emotion = None
-        return HttpResponse("Recording done")
 
+        feedback = Feedback.objects.get(id=feedback_id, user__id=request.user.id)
+        feedback.emotion = emotion
+        feedback.user_id = request.user.id
+        feedback.save()
+        
+        
 
 def get_feature(file_path: str, mfcc_len: int = 39, mean_signal_length: int = 110000):
     signal, fs = librosa.load(file_path)

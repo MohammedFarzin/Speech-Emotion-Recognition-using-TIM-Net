@@ -19,9 +19,19 @@ class BankDetails(models.Model):
         return self.bank_name
 
 class Feedback(models.Model):
+    EMOTION_CHOICES = [
+        ('happy', 'Happy'),
+        ('sad', 'Sad'),
+        ('neutral', 'Neutral'),
+        ('angry', 'Angry'),
+        ('calm', 'Calm'),
+        ('disgust', 'Disgust'),
+        ('fear', 'Fear'),
+        ('surprise', 'Surprise')
+    ]
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='feedbacks')
     bank = models.ForeignKey(BankDetails, on_delete=models.CASCADE, related_name='bank_feedbacks')
-    emotion = models.CharField(null=True)
+    emotion = models.CharField(max_length=10, choices=EMOTION_CHOICES, null=True)
 
 
     def get_url(self):
@@ -29,3 +39,12 @@ class Feedback(models.Model):
     
     def __str__(self):
         return f"{self.user.username} - {self.bank.bank_name}"
+    
+    def average_emotion(self):
+        emotion = Feedback.objects.filter(emotion=self)
+        avg = 0
+        if emotion['average'] is not None:
+            avg = float(emotion['average'])
+        return avg
+    
+
