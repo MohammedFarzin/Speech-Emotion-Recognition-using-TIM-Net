@@ -48,7 +48,7 @@
 
       <div class="profile">
         {% comment %} <img src="assets/img/bank_main_bg.jpg" alt="" class="img-fluid rounded-circle"> {% endcomment %}
-        <h1 class="text-light"><a href="index.html">Alex Smith</a></h1>
+        <h1 class="text-light"><a href="index.html">{{ user }}</a></h1>
         {% comment %} <div class="social-links mt-3 text-center">
           <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
           <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
@@ -74,7 +74,7 @@
   <!-- ======= Hero Section ======= -->
   <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
     <div class="hero-container" data-aos="fade-in">
-      <h1>Alex Smith</h1>
+      <h1>{{ user }}</h1>
       {% comment %} <p>I'm <span class="typed" data-typed-items="Designer, Developer, Freelancer, Photographer"></span></p> {% endcomment %}
     </div>
   </section><!-- End Hero -->
@@ -85,7 +85,7 @@
     
 
     <!-- ======= Facts Section ======= -->
-    <section id="facts" class="facts">
+    {% comment %} <section id="facts" class="facts">
       <div class="container">
 
         <div class="section-title">
@@ -130,7 +130,7 @@
         </div>
 
       </div>
-    </section><!-- End Facts Section -->
+    </section><!-- End Facts Section --> {% endcomment %}
 
     <section id="about" class="about">
         <div class="container">
@@ -150,17 +150,17 @@
                 <div class="col-lg-8">
                     <label for="progress-bar"><a href="{{ bank_detail.get_url }}"><i class="bi bi-chevron-right"></i> <strong>{{ bank_detail.bank_name }}</strong></a></label>
                     <div class="ms-5">
-                      <span>
+                      <span class="text-danger fw-bold">
                         Not Satisfied
                         </span>
                     
                     <progress id="progress-bar" value="{{ bank_detail.average_emotion }}" max="100"></progress>
-                    <span>
+                    <span class='text-success fw-bold'>
                        Satisfied
                       </span>
                       
                       <span>
-                      ( {{ bank_detail.emotion_count }} )
+                      ( FeedBack: {{ bank_detail.emotion_count }} )
                       </span>
                       
                     </div>

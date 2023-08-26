@@ -18,9 +18,11 @@ from django.contrib import messages
 def home(request):
     bank_details = BankDetails.objects.all()
     bank_feedback = Feedback.objects.all()
+    user = request.user.username
     context = {
         'bank_details' : bank_details,
-        'bank_feedback' : bank_feedback        
+        'bank_feedback' : bank_feedback,
+        'user' : user        
     }
     return render(request, 'index.html', context)
 
