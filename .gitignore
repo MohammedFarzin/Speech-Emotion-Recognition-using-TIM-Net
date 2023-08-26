@@ -1,2 +1,6 @@
 ml_model/
 */migrations/
+timnet/Dataset/
+timnet/Models/
+timnet/Results/
+timnet/tim-net/
