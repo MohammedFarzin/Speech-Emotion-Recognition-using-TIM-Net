@@ -1,5 +1,5 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponse, HttpResponseRedirect
 import pyaudio
 import wave
 import librosa
@@ -11,14 +11,15 @@ import tensorflow as tf
 import argparse
 import librosa
 import joblib
+from django.contrib import messages
 
 # Create your views here.
 
 def home(request):
-    # bank_details = BankDetails.objects.all()
+    bank_details = BankDetails.objects.all()
     bank_feedback = Feedback.objects.all()
     context = {
-        # 'bank_details' : bank_details,
+        'bank_details' : bank_details,
         'bank_feedback' : bank_feedback        
     }
     return render(request, 'index.html', context)
@@ -26,7 +27,8 @@ def home(request):
 
 def feedback(request, bank_slug):
     
-    bank = get_object_or_404(BankDetails, slug=bank_slug)
+    bank = BankDetails.objects.get(slug=bank_slug)
+    print(bank)
     feedbacks = Feedback.objects.filter(bank_id = bank.id)
     context = {
         'bank' : bank,
@@ -102,7 +104,7 @@ def emotion_generation(request):
 
 
 
-def voice_record(request, feedback_id, CHUNK = 1024, FORMAT = pyaudio.paInt16, CHANNELS = 1, RATE = 22050):
+def voice_record(request, bank_id, CHUNK = 1024, FORMAT = pyaudio.paInt16, CHANNELS = 1, RATE = 22050):
     url = request.META.get('HTTP_REFERER')
     print(url)
     if request.method == 'POST':
@@ -150,12 +152,22 @@ def voice_record(request, feedback_id, CHUNK = 1024, FORMAT = pyaudio.paInt16, C
             emotion = 'surprise'
         else:
             emotion = None
-
-        feedback = Feedback.objects.get(id=feedback_id, user__id=request.user.id)
-        feedback.emotion = emotion
-        feedback.user_id = request.user.id
-        feedback.save()
-        
+        print(bank_id, request.user.id)
+        try:
+            feedbacks = Feedback.objects.get(bank__id = bank_id, user__id = request.user.id)
+            feedbacks.emotion = emotion
+            feedbacks.user_id = request.user.id
+            feedbacks.save()
+            messages.success(request, "Thank you! You Feedback has been updated.")
+            return redirect(url)
+        except Feedback.DoesNotExist:
+            feedbacks = Feedback()
+            feedbacks.emotion = emotion
+            feedbacks.bank_id = bank_id
+            feedbacks.user_id = request.user.id
+            feedbacks.save()
+            messages.success(request, "Thank you! You Feedback has been submitted.")
+            return redirect(url)
         
 
 def get_feature(file_path: str, mfcc_len: int = 39, mean_signal_length: int = 110000):

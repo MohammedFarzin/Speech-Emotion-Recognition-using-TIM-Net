@@ -65,7 +65,7 @@
           {% comment %} <li><a href="#resume" class="nav-link scrollto"><i class="bx bx-file-blank"></i> <span>FeedBack</span></a></li> {% endcomment %}
           {% comment %} <li><a href="#portfolio" class="nav-link scrollto"><i class="bx bx-book-content"></i> <span>Portfolio</span></a></li>
           <li><a href="#services" class="nav-link scrollto"><i class="bx bx-server"></i> <span>Services</span></a></li>{% endcomment %}
-          {% comment %} <li><a href="{% url 'feedback'%}" class="nav-link scrollto"><i class="bx bx-envelope"></i> <span>FeedBack</span></a></li>  {% endcomment %}
+          <li><a href="{% url 'signout' %}" class="nav-link scrollto"><i class="bx bx-envelope"></i> <span>Logout</span></a></li> 
         </ul>
       </nav><!-- .nav-menu -->
     </div>
@@ -145,13 +145,26 @@
               <img src="assets/img/profile-img.jpg" class="img-fluid" alt="">
             </div> {% endcomment %}
             <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
-              {% for feedback_details in bank_feedback %}
+              {% for bank_detail in bank_details %}
               <div class="row">
-                <div class="col-lg-6">
-                    <label for="progress-bar"><a href="{{ feedback_details.get_url }}"><i class="bi bi-chevron-right"></i> <strong>{{ feedback_details.bank.bank_name }}</strong></a></label>
+                <div class="col-lg-8">
+                    <label for="progress-bar"><a href="{{ bank_detail.get_url }}"><i class="bi bi-chevron-right"></i> <strong>{{ bank_detail.bank_name }}</strong></a></label>
                     <div class="ms-5">
-                    <progress id="progress-bar" value="{{ feedback_details.average_emotion }}" max="100"></progress>
+                      <span>
+                        Not Satisfied
+                        </span>
+                    
+                    <progress id="progress-bar" value="{{ bank_detail.average_emotion }}" max="100"></progress>
+                    <span>
+                       Satisfied
+                      </span>
+                      
+                      <span>
+                      ( {{ bank_detail.emotion_count }} )
+                      </span>
+                      
                     </div>
+                    
                   </div>
                 </div>
                 {% endfor %}

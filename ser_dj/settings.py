@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'ser_model',
+    'authentication',
 ]
 
 MIDDLEWARE = [

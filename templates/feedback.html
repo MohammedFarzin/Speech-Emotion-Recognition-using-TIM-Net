@@ -52,12 +52,11 @@
         <div class="row" data-aos="fade-in">
             
             <div class="col-lg-5 d-flex align-items-stretch">
-                {% for feedback in feedbacks %}
-                    <form action="{% url 'voice_record' feedback.id%}" method="post">
+                
+                    <form action="{% url 'voice_record' bank.id %}" method="post">
                         {% csrf_token %}
                         <button type="submit" class="bg-danger" onclick="startRecording(this);">Record</button>
                     </form>
-                {% endfor %}
             
                 <script>
                     function startRecording(button) {
@@ -103,7 +102,7 @@
             </div>
              
 
-
+            {% if messages %} <div class="messages"> {% for message in messages %} <span{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</span> {% endfor %} </div> {% endif %}
         </div>
 
         </div>
